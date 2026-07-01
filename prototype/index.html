@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KonkerePlus — Build. Sell. Lease. Manage.</title>
+  <meta name="description" content="One platform to build, sell, lease, and manage every property — construction, listings, leasing and property management for Nigeria and beyond.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/theme.css">
+  <style>
+    .site { max-width: 1160px; margin: 0 auto; padding: 0 22px; }
+    .nav-top { position: sticky; top: 0; z-index: 100; background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo-row { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; }
+    .logo-row .mark { width: 32px; height: 32px; border-radius: 8px; background: var(--brand); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; }
+    .nav-links { display: flex; gap: 26px; font-size: 14px; font-weight: 500; color: var(--text-1); }
+    .nav-links a:hover { color: var(--text); }
+    .hero-sec { padding: 80px 0 60px; text-align: center; }
+    .eyebrow { display: inline-flex; align-items:center; gap:8px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text-1); font-size: 12.5px; font-weight: 600; margin-bottom: 22px; }
+    .hero-sec h1 { font-size: clamp(34px, 6vw, 60px); font-weight: 850; letter-spacing: -0.03em; line-height: 1.04; max-width: 900px; margin: 0 auto; }
+    .hero-sec h1 .grad { background: linear-gradient(120deg, var(--brand), #7c3aed); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero-sub { font-size: 18px; color: var(--muted); max-width: 640px; margin: 22px auto 0; line-height: 1.6; }
+    .hero-cta { display: flex; gap: 12px; justify-content: center; margin-top: 32px; flex-wrap: wrap; }
+    .trust { display: flex; gap: 34px; justify-content: center; margin-top: 54px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
+    .trust b { color: var(--text); font-size: 22px; display: block; font-variant-numeric: tabular-nums; }
+    section.block { padding: 56px 0; }
+    .sec-head { text-align: center; margin-bottom: 40px; }
+    .sec-head h2 { font-size: 32px; font-weight: 800; letter-spacing: -0.02em; }
+    .sec-head p { color: var(--muted); margin-top: 10px; font-size: 15px; }
+    .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .feat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 22px; transition: .15s; }
+    .feat:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+    .feat .fic { width: 42px; height: 42px; border-radius: 10px; background: var(--brand-soft); color: var(--brand); display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 14px; }
+    .feat h3 { font-size: 16px; margin-bottom: 6px; }
+    .feat p { color: var(--muted); font-size: 13.5px; line-height: 1.6; }
+    .listings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .lcard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; transition: .15s; cursor: pointer; }
+    .lcard:hover { border-color: var(--border-strong); transform: translateY(-2px); box-shadow: var(--shadow-2); }
+    .lcard .limg { height: 176px; position: relative; display: flex; align-items: flex-start; justify-content: space-between; padding: 12px; }
+    .lcard .lbody { padding: 16px; }
+    .lcard h3 { font-size: 15px; margin-bottom: 4px; }
+    .lcard .price { font-weight: 800; font-size: 17px; margin: 10px 0 8px; }
+    .lmeta { display: flex; gap: 14px; color: var(--muted); font-size: 12.5px; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 12px; }
+    .filter-bar { display: flex; gap: 10px; justify-content: center; margin-bottom: 28px; flex-wrap: wrap; }
+    .portals { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .portal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 20px; text-align: center; transition: .15s; }
+    .portal:hover { border-color: var(--brand); transform: translateY(-2px); }
+    .portal .pic { font-size: 26px; margin-bottom: 10px; }
+    .portal h4 { font-size: 14.5px; }
+    .portal p { color: var(--muted); font-size: 12px; margin-top: 4px; }
+    .cta-band { background: linear-gradient(120deg, var(--brand-700), #5b21b6); border-radius: var(--r-xl); padding: 48px; text-align: center; margin: 20px 0; }
+    .cta-band h2 { font-size: 30px; font-weight: 800; color: #fff; }
+    .cta-band p { color: rgba(255,255,255,.82); margin: 12px auto 24px; max-width: 500px; }
+    .lead-form { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 26px; max-width: 560px; margin: 0 auto; }
+    .lead-form .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    footer.site-foot { border-top: 1px solid var(--border); padding: 40px 0; margin-top: 40px; color: var(--muted); font-size: 13px; }
+    .foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 24px; margin-bottom: 30px; }
+    .foot-grid a { display: block; padding: 4px 0; color: var(--muted); }
+    .foot-grid a:hover { color: var(--text); }
+    .compliance { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; padding-top: 20px; border-top: 1px solid var(--border); }
+    @media (max-width: 860px) { .feat-grid, .listings-grid, .portals { grid-template-columns: 1fr 1fr; } .nav-links { display: none; } .foot-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 560px) { .feat-grid, .listings-grid, .portals, .lead-form .grid2 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="nav-top"><div class="site nav-inner">
+    <div class="logo-row"><span class="mark">K+</span>KonkerePlus</div>
+    <nav class="nav-links">
+      <a href="#services">Services</a><a href="#listings">Listings</a><a href="#projects">Projects</a>
+      <a href="#invest">Invest</a><a href="#contact">Contact</a>
+    </nav>
+    <div class="row gap">
+      <a class="btn ghost sm" href="app.html">Log in</a>
+      <a class="btn primary sm" href="#contact">Get started</a>
+    </div>
+  </div></div>
+
+  <div class="site">
+    <section class="hero-sec">
+      <span class="eyebrow">🇳🇬 Built for West-African developers · multi-tenant SaaS</span>
+      <h1>One platform to <span class="grad">build, sell, lease</span> & manage every property.</h1>
+      <p class="hero-sub">KonkerePlus unifies construction, sales &amp; leasing, and property management — for owners, managers, tenants, and the teams in between.</p>
+      <div class="hero-cta">
+        <a class="btn primary lg" href="app.html">Explore the platform →</a>
+        <a class="btn lg" href="#listings">Browse listings</a>
+      </div>
+      <div class="trust">
+        <div><b>132</b> units managed</div>
+        <div><b>87%</b> collection rate</div>
+        <div><b>6</b> live properties</div>
+        <div><b>₦4.2B</b> portfolio value</div>
+      </div>
+    </section>
+
+    <section class="block" id="services">
+      <div class="sec-head"><h2>Everything, in one system of record</h2><p>Twelve deep modules behind a single permission-first login.</p></div>
+      <div class="feat-grid">
+        <div class="feat"><div class="fic">⌂</div><h3>Construction Management</h3><p>Daily &amp; progress reports with geo-stamped photos, RFIs, change orders, Gantt timelines and budget-vs-actual.</p></div>
+        <div class="feat"><div class="fic">▦</div><h3>Property &amp; Unit Management</h3><p>Property → building → block → floor → unit hierarchy with occupancy and financial roll-ups.</p></div>
+        <div class="feat"><div class="fic">✎</div><h3>Leasing &amp; e-Signature</h3><p>Template-driven lease drafting, approval workflow, DocuSign e-sign, renewals and deposit tracking.</p></div>
+        <div class="feat"><div class="fic">₦</div><h3>Rent Collection</h3><p>Paystack, Flutterwave, card &amp; transfer. Idempotent payments, auto-receipts, reminders and reconciliation.</p></div>
+        <div class="feat"><div class="fic">⚒</div><h3>Maintenance</h3><p>Tenant-raised requests, SLA timers with escalation, vendor dispatch and before/after evidence.</p></div>
+        <div class="feat"><div class="fic">§</div><h3>Legal &amp; Documents</h3><p>Case tracking, notices &amp; hearings, versioned document management with OCR full-text search.</p></div>
+      </div>
+    </section>
+
+    <section class="block" id="listings">
+      <div class="sec-head"><h2>Featured listings</h2><p>Residential, commercial, short-stay and warehouse space across Nigeria.</p></div>
+      <div class="filter-bar" id="filters"></div>
+      <div class="listings-grid" id="listings-grid"></div>
+      <div class="center" style="margin-top:28px"><a class="btn lg" href="app.html">See all in the platform →</a></div>
+    </section>
+
+    <section class="block" id="invest">
+      <div class="cta-band">
+        <h2>Investment Opportunities</h2>
+        <p>Access curated development projects with target returns, timelines and full financials — after a quick registration.</p>
+        <a class="btn lg" href="#contact" style="background:#fff;color:var(--brand-700);border-color:#fff">Unlock investor access</a>
+      </div>
+    </section>
+
+    <section class="block" id="portals">
+      <div class="sec-head"><h2>Portals for every role</h2><p>Isolated, permission-scoped access for each type of user.</p></div>
+      <div class="portals">
+        <a class="portal" href="app.html"><div class="pic">🏠</div><h4>Tenant</h4><p>Pay rent, receipts, maintenance</p></a>
+        <a class="portal" href="app.html"><div class="pic">📈</div><h4>Owner</h4><p>Returns, statements, occupancy</p></a>
+        <a class="portal" href="app.html"><div class="pic">🔧</div><h4>Contractor</h4><p>Work orders, quotes, invoices</p></a>
+        <a class="portal" href="app.html"><div class="pic">📦</div><h4>Vendor</h4><p>Purchase orders, payments</p></a>
+      </div>
+    </section>
+
+    <section class="block" id="contact">
+      <div class="sec-head"><h2>Request a demo</h2><p>Tell us about your portfolio and we'll set up a tenant for you.</p></div>
+      <form class="lead-form" onsubmit="event.preventDefault(); this.innerHTML='<div class=&quot;center col&quot; style=&quot;text-align:center;padding:20px&quot;><div style=&quot;font-size:40px&quot;>✅</div><h3 style=&quot;margin-top:12px&quot;>Thanks — we\'ll be in touch</h3><p class=&quot;muted&quot;>Your enquiry has been captured into CRM.</p></div>';">
+        <div class="grid2">
+          <div class="field"><label>Full name</label><input class="input" required placeholder="Jane Doe"></div>
+          <div class="field"><label>Company</label><input class="input" placeholder="Acme Developments"></div>
+        </div>
+        <div class="grid2" style="margin-top:12px">
+          <div class="field"><label>Email</label><input class="input" type="email" required placeholder="jane@acme.com"></div>
+          <div class="field"><label>Phone</label><input class="input" placeholder="+234…"></div>
+        </div>
+        <div class="field" style="margin-top:12px"><label>What do you need?</label>
+          <select class="select"><option>Request a demo</option><option>Book a consultation</option><option>Vendor registration</option><option>Become a property owner</option></select></div>
+        <button class="btn primary lg" style="width:100%;justify-content:center;margin-top:16px">Send enquiry</button>
+        <p class="muted" style="font-size:11px;text-align:center;margin-top:10px">🔒 NDPR &amp; GDPR-aligned · we only use this to contact you.</p>
+      </form>
+    </section>
+  </div>
+
+  <footer class="site-foot"><div class="site">
+    <div class="foot-grid">
+      <div>
+        <div class="logo-row" style="margin-bottom:12px"><span class="mark">K+</span>KonkerePlus</div>
+        <p style="max-width:280px">One platform to build, sell, lease and manage every property. Nigeria-first, built for scale.</p>
+      </div>
+      <div><b style="color:var(--text)">Product</b><a href="app.html">Platform</a><a href="#listings">Listings</a><a href="#invest">Invest</a></div>
+      <div><b style="color:var(--text)">Company</b><a href="#">About</a><a href="#">Careers</a><a href="#">News</a></div>
+      <div><b style="color:var(--text)">Legal</b><a href="#">Privacy (NDPR)</a><a href="#">Terms</a><a href="#">Cookies</a></div>
+    </div>
+    <div class="compliance">
+      <span class="badge grey">18+ · PLAY RESPONSIBLY N/A</span>
+      <span class="badge grey">NG · NDPR COMPLIANT</span>
+      <span class="badge grey">🔒 AES-256 · TLS 1.2+</span>
+      <span style="margin-left:auto">© 2026 KonkerePlus. Prototype.</span>
+    </div>
+  </div></footer>
+
+  <script src="assets/data.js"></script>
+  <script>
+    (function () {
+      const grid = document.getElementById('listings-grid');
+      const filters = document.getElementById('filters');
+      const types = ['All', ...new Set(KP.listings.map(l => l.type))];
+      let active = 'All';
+      function draw() {
+        filters.innerHTML = types.map(t => `<span class="chip ${t===active?'active':''}" data-t="${t}">${t}</span>`).join('');
+        filters.querySelectorAll('.chip').forEach(c => c.onclick = () => { active = c.dataset.t; draw(); });
+        const items = KP.listings.filter(l => active === 'All' || l.type === active);
+        grid.innerHTML = items.map(l => `
+          <a class="lcard" href="app.html">
+            <div class="limg" style="background:${l.img}">
+              <span class="badge blue">${l.deal}</span>${l.tag?`<span class="badge amber">${l.tag}</span>`:''}
+            </div>
+            <div class="lbody">
+              <h3>${l.title}</h3>
+              <div class="muted" style="font-size:12.5px">📍 ${l.city}</div>
+              <div class="price">${l.price}</div>
+              <div class="lmeta"><span>🛏 ${l.beds} bd</span><span>🛁 ${l.baths} ba</span><span>📐 ${l.sqft} ft²</span></div>
+            </div>
+          </a>`).join('');
+      }
+      draw();
+    })();
+  </script>
+</body>
+</html>
