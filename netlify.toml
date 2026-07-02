@@ -1,0 +1,13 @@
+# Netlify configuration for the KonkerePlus prototype.
+# The prototype is static (no build step); we publish the /prototype folder as the site root.
+
+[build]
+  publish = "prototype"
+  command = ""
+
+# Nice-to-have: send unknown paths to the marketing home instead of a hard 404.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  # Only applies when no matching static file exists (Netlify checks files first).
