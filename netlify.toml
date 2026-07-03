@@ -1,43 +1,24 @@
-# Netlify configuration for the KonkerePlus prototype.
-# The prototype is static (no build step); we publish the /prototype folder as the site root.
+# Netlify config for the KonkerePlus app (Next.js).
+# NOTE: this takes effect only when `feat/foundation` is merged to main and we cut
+# konkereplus.com over from the static prototype to the real app. `main` still serves
+# the static prototype (publish = "prototype") until then.
 
 [build]
-  publish = "prototype"
-  command = ""
+  command = "npm run build"
 
-# ---- Redirects (evaluated top-to-bottom; first match wins) ----
-# Existing static files are always served before these rules (none are forced
-# except the canonical-host redirect), so /app.html and /assets/* are unaffected.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
-# 1. Canonical host: send www → apex over HTTPS.
+# Canonical host: www → apex.
 [[redirects]]
   from = "https://www.konkereplus.com/*"
   to = "https://konkereplus.com/:splat"
   status = 301
   force = true
 
-[[redirects]]
-  from = "http://www.konkereplus.com/*"
-  to = "https://konkereplus.com/:splat"
-  status = 301
-  force = true
-
-# 2. Clean deep-link: /app serves the application shell without the .html.
-[[redirects]]
-  from = "/app"
-  to = "/app.html"
-  status = 200
-
-# (No catch-all fallback: it shadowed real files like /robots.txt. Unknown paths
-#  now return Netlify's normal 404, which is fine for a hash-routed SPA.)
-
-# ---- Headers ----
 [[headers]]
   for = "/*"
   [headers.values]
-    # Keep the preview out of search engines (belt-and-suspenders with robots.txt).
-    X-Robots-Tag = "noindex, nofollow"
-    # Enforce HTTPS at the browser level (complements Netlify's Force HTTPS toggle).
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"

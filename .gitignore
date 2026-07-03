@@ -18,3 +18,10 @@ Thumbs.db
 
 # Netlify CLI local state & build artifacts
 .netlify/
+
+# Next.js
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+.env.local
