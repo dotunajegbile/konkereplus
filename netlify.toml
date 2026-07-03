@@ -33,11 +33,8 @@
   to = "/app.html"
   status = 200
 
-# 3. Fallback: unknown paths render the marketing home instead of a hard 404.
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# (No catch-all fallback: it shadowed real files like /robots.txt. Unknown paths
+#  now return Netlify's normal 404, which is fine for a hash-routed SPA.)
 
 # ---- Headers ----
 [[headers]]
