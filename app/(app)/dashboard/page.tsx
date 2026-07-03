@@ -16,6 +16,9 @@ export default async function DashboardPage() {
     .eq("user_id", user.id)
     .maybeSingle();
 
+  // No tenant yet → send them through onboarding first.
+  if (!membership) redirect("/onboarding");
+
   const tenantName =
     (membership?.tenants as { name?: string } | null)?.name ?? "—";
 
