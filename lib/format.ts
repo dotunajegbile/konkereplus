@@ -18,3 +18,22 @@ export const UNIT_STATUS_STYLE: Record<string, string> = {
   maintenance: "bg-amber-500/15 text-amber-400",
   vacant: "bg-white/10 text-white/50",
 };
+
+export const LEASE_STATUS_STYLE: Record<string, string> = {
+  active: "bg-green-500/15 text-green-400",
+  draft: "bg-white/10 text-white/60",
+  pending_approval: "bg-amber-500/15 text-amber-400",
+  pending_signature: "bg-amber-500/15 text-amber-400",
+  renewed: "bg-blue-500/15 text-blue-400",
+  expired: "bg-white/10 text-white/50",
+  terminated: "bg-red-500/15 text-red-400",
+};
+
+export const CADENCE_LABEL: Record<string, string> = {
+  monthly: "Monthly", quarterly: "Quarterly", biannual: "Biannual", annual: "Annual",
+};
+
+export function fmtDate(d: string | null | undefined): string {
+  if (!d) return "—";
+  return new Date(d).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+}

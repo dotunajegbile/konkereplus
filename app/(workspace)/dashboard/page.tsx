@@ -16,6 +16,11 @@ export default async function DashboardPage() {
     .from("tenant_parties")
     .select("id", { count: "exact", head: true });
 
+  const { count: activeLeaseCount } = await supabase
+    .from("leases")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "active");
+
   return (
     <div className="mx-auto max-w-4xl">
       <h1 className="text-2xl font-extrabold tracking-tight">Dashboard</h1>
@@ -25,7 +30,7 @@ export default async function DashboardPage() {
         <Tile label="Properties" value={String(propertyCount ?? 0)} href="/properties" />
         <Tile label="Units" value={String(unitCount ?? 0)} href="/units" />
         <Tile label="Tenants" value={String(tenantCount ?? 0)} href="/tenants" />
-        <Tile label="Active leases" value="—" />
+        <Tile label="Active leases" value={String(activeLeaseCount ?? 0)} href="/leases" />
       </div>
 
       <div className="mt-6 rounded-xl border border-white/10 bg-white/[0.03] p-5">

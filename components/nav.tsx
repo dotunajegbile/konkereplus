@@ -8,11 +8,11 @@ const ITEMS: [string, string, string][] = [
   ["/properties", "Properties", "▦"],
   ["/units", "Units", "▥"],
   ["/tenants", "Tenants", "☺"],
+  ["/leases", "Leases", "✎"],
 ];
 
 // Modules coming next — shown disabled so the roadmap is visible in-product.
 const SOON: [string, string][] = [
-  ["Leases", "✎"],
   ["Rent & Invoices", "₦"],
 ];
 

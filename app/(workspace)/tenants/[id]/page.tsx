@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { ngn, fmtDate, LEASE_STATUS_STYLE } from "@/lib/format";
 
 const KYC_STYLE: Record<string, string> = {
   verified: "bg-green-500/15 text-green-400",
@@ -22,6 +23,12 @@ export default async function TenantDetailPage({
 
   if (!t) notFound();
   const unit = t.units as { id?: string; unit_number?: string; property_id?: string; properties?: { name?: string } } | null;
+
+  const { data: leases } = await supabase
+    .from("leases")
+    .select("id, reference, status, start_date, end_date, rent_amount_minor")
+    .eq("tenant_party_id", t.id)
+    .order("created_at", { ascending: false });
 
   return (
     <div className="mx-auto max-w-3xl">
@@ -47,10 +54,48 @@ export default async function TenantDetailPage({
         <Row label="Added" value={new Date(t.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })} />
       </div>
 
-      <div className="mt-6 rounded-xl border border-white/10 bg-white/[0.03] p-5 text-sm text-white/50">
-        Lease, rent history, maintenance requests and documents attach to this tenant
-        next — Leases is the following module.
+      <div className="mt-8 flex items-center justify-between">
+        <h2 className="font-semibold">Leases <span className="text-white/40">({leases?.length ?? 0})</span></h2>
+        <Link href={`/leases/new?tenant=${t.id}`} className="rounded-lg border border-white/15 px-3 py-1.5 text-sm font-semibold hover:bg-white/5">
+          + New lease
+        </Link>
       </div>
+
+      {(leases?.length ?? 0) === 0 ? (
+        <div className="mt-3 rounded-xl border border-dashed border-white/15 py-10 text-center text-sm text-white/50">
+          No leases yet.{" "}
+          <Link href={`/leases/new?tenant=${t.id}`} className="text-brand hover:underline">Draft one</Link>.
+        </div>
+      ) : (
+        <div className="mt-3 overflow-hidden rounded-xl border border-white/10">
+          <table className="w-full text-sm">
+            <thead className="border-b border-white/10 text-left text-xs uppercase tracking-wide text-white/40">
+              <tr>
+                <th className="px-4 py-2.5 font-semibold">Ref</th>
+                <th className="px-4 py-2.5 font-semibold">Term</th>
+                <th className="px-4 py-2.5 text-right font-semibold">Rent</th>
+                <th className="px-4 py-2.5 font-semibold">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {leases!.map((l) => (
+                <tr key={l.id} className="border-b border-white/5 last:border-0 hover:bg-white/[0.03]">
+                  <td className="px-4 py-2.5">
+                    <Link href={`/leases/${l.id}`} className="font-mono text-xs font-semibold hover:text-brand">{l.reference}</Link>
+                  </td>
+                  <td className="px-4 py-2.5 text-white/60">{fmtDate(l.start_date)} → {fmtDate(l.end_date)}</td>
+                  <td className="px-4 py-2.5 text-right font-mono tabular-nums">{ngn(l.rent_amount_minor)}</td>
+                  <td className="px-4 py-2.5">
+                    <span className={"rounded-full px-2.5 py-1 text-xs font-medium capitalize " + (LEASE_STATUS_STYLE[l.status] ?? "bg-white/10 text-white/60")}>
+                      {String(l.status).replace(/_/g, " ")}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
