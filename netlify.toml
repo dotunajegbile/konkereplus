@@ -5,9 +5,47 @@
   publish = "prototype"
   command = ""
 
-# Nice-to-have: send unknown paths to the marketing home instead of a hard 404.
+# ---- Basic Auth gate (activates only when SITE_PASSWORD env var is set) ----
+[[edge_functions]]
+  function = "auth"
+  path = "/*"
+
+# ---- Redirects (evaluated top-to-bottom; first match wins) ----
+# Existing static files are always served before these rules (none are forced
+# except the canonical-host redirect), so /app.html and /assets/* are unaffected.
+
+# 1. Canonical host: send www → apex over HTTPS.
+[[redirects]]
+  from = "https://www.konkereplus.com/*"
+  to = "https://konkereplus.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.konkereplus.com/*"
+  to = "https://konkereplus.com/:splat"
+  status = 301
+  force = true
+
+# 2. Clean deep-link: /app serves the application shell without the .html.
+[[redirects]]
+  from = "/app"
+  to = "/app.html"
+  status = 200
+
+# 3. Fallback: unknown paths render the marketing home instead of a hard 404.
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  # Only applies when no matching static file exists (Netlify checks files first).
+
+# ---- Headers ----
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Keep the preview out of search engines (belt-and-suspenders with robots.txt).
+    X-Robots-Tag = "noindex, nofollow"
+    # Enforce HTTPS at the browser level (complements Netlify's Force HTTPS toggle).
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

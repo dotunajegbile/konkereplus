@@ -1,0 +1,3 @@
+# KonkerePlus is a private preview — keep it out of search engines.
+User-agent: *
+Disallow: /
