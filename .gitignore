@@ -15,3 +15,6 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+
+# Netlify CLI local state & build artifacts
+.netlify/
