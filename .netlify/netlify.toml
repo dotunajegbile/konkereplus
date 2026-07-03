@@ -1,0 +1,75 @@
+headersOrigin = "config"
+redirectsOrigin = "config"
+plugins = []
+
+[build]
+edge_functions = "C:\\Users\\HomePC\\Desktop\\KonkerePlus\\netlify\\edge-functions"
+publish = "C:\\Users\\HomePC\\Desktop\\KonkerePlus\\prototype"
+publishOrigin = "config"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
+
+[[edge_functions]]
+function = "auth"
+path = "/*"
+
+[functions]
+
+[functions."*"]
+
+[[headers]]
+for = "/*"
+
+[headers.values]
+X-Robots-Tag = "noindex, nofollow"
+Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+X-Content-Type-Options = "nosniff"
+Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[redirects]]
+from = "https://www.konkereplus.com/*"
+to = "https://konkereplus.com/:splat"
+status = 301.0
+force = true
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
+from = "http://www.konkereplus.com/*"
+to = "https://konkereplus.com/:splat"
+status = 301.0
+force = true
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
+from = "/app"
+to = "/app.html"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
