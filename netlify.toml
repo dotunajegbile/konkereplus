@@ -5,11 +5,6 @@
   publish = "prototype"
   command = ""
 
-# ---- Basic Auth gate (activates only when SITE_PASSWORD env var is set) ----
-[[edge_functions]]
-  function = "auth"
-  path = "/*"
-
 # ---- Redirects (evaluated top-to-bottom; first match wins) ----
 # Existing static files are always served before these rules (none are forced
 # except the canonical-host redirect), so /app.html and /assets/* are unaffected.
