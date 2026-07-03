@@ -12,14 +12,19 @@ export default async function DashboardPage() {
     .from("units")
     .select("id", { count: "exact", head: true });
 
+  const { count: tenantCount } = await supabase
+    .from("tenant_parties")
+    .select("id", { count: "exact", head: true });
+
   return (
     <div className="mx-auto max-w-4xl">
       <h1 className="text-2xl font-extrabold tracking-tight">Dashboard</h1>
       <p className="mt-1 text-white/60">Your workspace is live.</p>
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-3">
+      <div className="mt-6 grid gap-3 sm:grid-cols-4">
         <Tile label="Properties" value={String(propertyCount ?? 0)} href="/properties" />
         <Tile label="Units" value={String(unitCount ?? 0)} href="/units" />
+        <Tile label="Tenants" value={String(tenantCount ?? 0)} href="/tenants" />
         <Tile label="Active leases" value="—" />
       </div>
 

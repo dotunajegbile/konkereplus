@@ -32,6 +32,12 @@ export default async function PropertyDetailPage({
 
   const occupied = (units ?? []).filter((u) => u.status === "occupied").length;
 
+  const unitIds = (units ?? []).map((u) => u.id);
+  const { data: occupants } = unitIds.length
+    ? await supabase.from("tenant_parties").select("full_name, unit_id").in("unit_id", unitIds)
+    : { data: [] as { full_name: string; unit_id: string }[] };
+  const occByUnit = new Map((occupants ?? []).map((o) => [o.unit_id, o.full_name]));
+
   return (
     <div className="mx-auto max-w-3xl">
       <Link href="/properties" className="text-sm text-white/50 hover:text-white">
@@ -85,6 +91,7 @@ export default async function PropertyDetailPage({
               <tr>
                 <th className="px-4 py-2.5 font-semibold">Unit</th>
                 <th className="px-4 py-2.5 font-semibold">Config</th>
+                <th className="px-4 py-2.5 font-semibold">Tenant</th>
                 <th className="px-4 py-2.5 text-right font-semibold">Rent / yr</th>
                 <th className="px-4 py-2.5 font-semibold">Status</th>
               </tr>
@@ -94,6 +101,7 @@ export default async function PropertyDetailPage({
                 <tr key={u.id} className="border-b border-white/5 last:border-0">
                   <td className="px-4 py-2.5 font-mono text-xs font-semibold">{u.unit_number}</td>
                   <td className="px-4 py-2.5 text-white/60">{u.bedrooms} bd · {u.bathrooms} ba</td>
+                  <td className="px-4 py-2.5 text-white/60">{occByUnit.get(u.id) ?? "—"}</td>
                   <td className="px-4 py-2.5 text-right font-mono tabular-nums">{ngn(u.rent_amount_minor)}</td>
                   <td className="px-4 py-2.5">
                     <span className={"rounded-full px-2.5 py-1 text-xs font-medium capitalize " + (UNIT_STATUS_STYLE[u.status] ?? "bg-white/10 text-white/60")}>
