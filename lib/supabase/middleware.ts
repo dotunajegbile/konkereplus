@@ -32,11 +32,10 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Gate the authenticated app.
+  // Gate the authenticated app: everything except the public routes.
   const path = request.nextUrl.pathname;
-  const isProtected =
-    path.startsWith("/dashboard") || path.startsWith("/onboarding");
-  if (!user && isProtected) {
+  const isPublic = path === "/" || path.startsWith("/login");
+  if (!user && !isPublic) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
