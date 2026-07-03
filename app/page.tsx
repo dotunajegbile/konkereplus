@@ -13,8 +13,8 @@ export default function Home() {
         The real platform is being built here.
       </h1>
       <p className="max-w-xl text-white/60">
-        Next.js + Supabase foundation. Auth and the multi-tenant core come first,
-        then Properties → Units → Tenants → Leases → Rent.
+        Next.js + Supabase. Auth, multi-tenant core and the Properties module are
+        live — Units → Tenants → Leases → Rent are next.
       </p>
       <div className="flex gap-3">
         <Link
