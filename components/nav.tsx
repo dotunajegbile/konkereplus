@@ -6,11 +6,11 @@ import { usePathname } from "next/navigation";
 const ITEMS: [string, string, string][] = [
   ["/dashboard", "Dashboard", "▤"],
   ["/properties", "Properties", "▦"],
+  ["/units", "Units", "▥"],
 ];
 
 // Modules coming next — shown disabled so the roadmap is visible in-product.
 const SOON: [string, string][] = [
-  ["Units", "▥"],
   ["Tenants", "☺"],
   ["Leases", "✎"],
   ["Rent & Invoices", "₦"],

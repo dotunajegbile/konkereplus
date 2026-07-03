@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { ngn, UNIT_STATUS_STYLE } from "@/lib/format";
 
 const TYPE_LABEL: Record<string, string> = {
   residential: "Residential", commercial: "Commercial", mixed_use: "Mixed-use",
@@ -22,6 +23,14 @@ export default async function PropertyDetailPage({
     .maybeSingle();
 
   if (!p) notFound();
+
+  const { data: units } = await supabase
+    .from("units")
+    .select("id, unit_number, bedrooms, bathrooms, rent_amount_minor, status")
+    .eq("property_id", p.id)
+    .order("unit_number");
+
+  const occupied = (units ?? []).filter((u) => u.status === "occupied").length;
 
   return (
     <div className="mx-auto max-w-3xl">
@@ -46,10 +55,57 @@ export default async function PropertyDetailPage({
         <Row label="Added" value={new Date(p.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })} />
       </div>
 
-      <div className="mt-6 rounded-xl border border-white/10 bg-white/[0.03] p-5 text-sm text-white/50">
-        Units, financials, maintenance and documents attach here next — this detail
-        view is the anchor the remaining modules hang off.
+      <div className="mt-8 flex items-center justify-between">
+        <h2 className="font-semibold">
+          Units{" "}
+          <span className="text-white/40">
+            ({units?.length ?? 0}{units?.length ? ` · ${occupied} occupied` : ""})
+          </span>
+        </h2>
+        <Link
+          href={`/units/new?property=${p.id}`}
+          className="rounded-lg border border-white/15 px-3 py-1.5 text-sm font-semibold hover:bg-white/5"
+        >
+          + Add unit
+        </Link>
       </div>
+
+      {(units?.length ?? 0) === 0 ? (
+        <div className="mt-3 rounded-xl border border-dashed border-white/15 py-10 text-center text-sm text-white/50">
+          No units yet.{" "}
+          <Link href={`/units/new?property=${p.id}`} className="text-brand hover:underline">
+            Add the first one
+          </Link>
+          .
+        </div>
+      ) : (
+        <div className="mt-3 overflow-hidden rounded-xl border border-white/10">
+          <table className="w-full text-sm">
+            <thead className="border-b border-white/10 text-left text-xs uppercase tracking-wide text-white/40">
+              <tr>
+                <th className="px-4 py-2.5 font-semibold">Unit</th>
+                <th className="px-4 py-2.5 font-semibold">Config</th>
+                <th className="px-4 py-2.5 text-right font-semibold">Rent / yr</th>
+                <th className="px-4 py-2.5 font-semibold">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {units!.map((u) => (
+                <tr key={u.id} className="border-b border-white/5 last:border-0">
+                  <td className="px-4 py-2.5 font-mono text-xs font-semibold">{u.unit_number}</td>
+                  <td className="px-4 py-2.5 text-white/60">{u.bedrooms} bd · {u.bathrooms} ba</td>
+                  <td className="px-4 py-2.5 text-right font-mono tabular-nums">{ngn(u.rent_amount_minor)}</td>
+                  <td className="px-4 py-2.5">
+                    <span className={"rounded-full px-2.5 py-1 text-xs font-medium capitalize " + (UNIT_STATUS_STYLE[u.status] ?? "bg-white/10 text-white/60")}>
+                      {String(u.status).replace(/_/g, " ")}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

@@ -8,6 +8,10 @@ export default async function DashboardPage() {
     .from("properties")
     .select("id", { count: "exact", head: true });
 
+  const { count: unitCount } = await supabase
+    .from("units")
+    .select("id", { count: "exact", head: true });
+
   return (
     <div className="mx-auto max-w-4xl">
       <h1 className="text-2xl font-extrabold tracking-tight">Dashboard</h1>
@@ -15,7 +19,7 @@ export default async function DashboardPage() {
 
       <div className="mt-6 grid gap-3 sm:grid-cols-3">
         <Tile label="Properties" value={String(propertyCount ?? 0)} href="/properties" />
-        <Tile label="Units" value="—" />
+        <Tile label="Units" value={String(unitCount ?? 0)} href="/units" />
         <Tile label="Active leases" value="—" />
       </div>
 
