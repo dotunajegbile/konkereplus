@@ -1,9 +1,8 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "KonkerePlus — Build. Sell. Lease. Manage.",
-  description:
-    "One platform to build, sell, lease and manage every property — construction, leasing, tenants, rent and maintenance for Nigeria and beyond.",
+  title: { absolute: "KonkerePlus — Build. Sell. Lease. Manage." },
+  alternates: { canonical: "/" },
 };
 
 const MODULES: [string, string, string][] = [
