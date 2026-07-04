@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { ngn, fmtDate, CASE_STATUS_STYLE, PROJECT_STATUS_STYLE } from "@/lib/format";
 import { loadArrearsRisk, RISK_TIER_STYLE } from "@/lib/arrears-risk";
+import { OnboardingChecklist, type SetupStep } from "@/components/onboarding-checklist";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 // Per-role dashboard: each staff role lands on a view tuned to their job.
@@ -219,8 +220,19 @@ async function opsDash(supabase: SupabaseClient) {
   const unpaid = inv.filter((i) => i.status === "open" || i.status === "part_paid" || i.status === "overdue");
   const rep = reported.count ?? 0;
 
+  // First-run setup guide — shown until the core property→invoice chain is complete.
+  const setup: SetupStep[] = [
+    { label: "Add your first property", hint: "Register a building or estate you manage.", href: "/properties/new", done: (props.count ?? 0) > 0 },
+    { label: "Add units", hint: "Break the property into rentable units.", href: "/units/new", done: unitRows.length > 0 },
+    { label: "Add a tenant", hint: "Create the renter's profile.", href: "/tenants/new", done: (tenants.count ?? 0) > 0 },
+    { label: "Create & activate a lease", hint: "Link a tenant to a unit with rent terms.", href: "/leases/new", done: (leases.count ?? 0) > 0 },
+    { label: "Generate a rent invoice", hint: "Open the active lease and bill the first period.", href: "/leases", done: inv.length > 0 },
+  ];
+  const setupDone = setup.every((s) => s.done);
+
   return (
     <>
+      {!setupDone && <OnboardingChecklist steps={setup} />}
       <div className="mt-6 grid gap-3 sm:grid-cols-4">
         <Tile label="Properties" value={String(props.count ?? 0)} href="/properties" />
         <Tile label="Units" value={String(unitRows.length)} sub={`${occupied} occupied`} href="/units" />
