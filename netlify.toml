@@ -23,8 +23,16 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    # Dev app subdomain — keep it out of search engines for now.
-    X-Robots-Tag = "noindex, nofollow"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Keep the authenticated app out of search results; the marketing homepage stays indexable.
+[[headers]]
+  for = "/dashboard/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+[[headers]]
+  for = "/portal/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
