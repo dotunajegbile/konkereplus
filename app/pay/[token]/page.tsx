@@ -41,6 +41,11 @@ export default async function PayPage({
         <h1 className="text-xl font-extrabold tracking-tight">Hi {portal.tenant_name}</h1>
         <p className="mt-1 text-sm text-white/50">Pay your rent by bank transfer, then tell us below.</p>
 
+        <a href={`/claim/${params.token}`} className="mt-3 flex items-center justify-between rounded-lg border border-brand/40 bg-brand/10 px-4 py-2.5 text-sm">
+          <span className="font-medium text-white/80">Create an account to manage your tenancy</span>
+          <span className="font-semibold text-brand">Set up →</span>
+        </a>
+
         {searchParams.reported && (
           <p className="mt-4 rounded-lg bg-green-500/10 px-3 py-2.5 text-sm text-green-400">
             ✓ Thanks — we’ve notified your property manager. They’ll confirm once the transfer lands.

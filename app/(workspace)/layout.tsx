@@ -19,7 +19,13 @@ export default async function WorkspaceLayout({
     .select("role, tenants(name)")
     .eq("user_id", user.id)
     .maybeSingle();
-  if (!membership) redirect("/onboarding");
+
+  // Not staff? Route linked tenants to their portal; otherwise onboard a new company.
+  if (!membership) {
+    const { data: party } = await supabase
+      .from("tenant_parties").select("id").eq("user_id", user.id).maybeSingle();
+    redirect(party ? "/portal" : "/onboarding");
+  }
 
   const tenantName = (membership.tenants as { name?: string } | null)?.name ?? "—";
   const role = membership.role.replace(/_/g, " ");
