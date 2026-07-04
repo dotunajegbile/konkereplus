@@ -9,11 +9,12 @@ const ITEMS: [string, string, string][] = [
   ["/units", "Units", "▥"],
   ["/tenants", "Tenants", "☺"],
   ["/leases", "Leases", "✎"],
+  ["/rent", "Rent", "₦"],
 ];
 
 // Modules coming next — shown disabled so the roadmap is visible in-product.
 const SOON: [string, string][] = [
-  ["Rent & Invoices", "₦"],
+  ["Maintenance", "⚒"],
 ];
 
 export function Nav() {

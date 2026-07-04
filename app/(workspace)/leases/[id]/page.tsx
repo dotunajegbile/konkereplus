@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ngn, fmtDate, CADENCE_LABEL, LEASE_STATUS_STYLE } from "@/lib/format";
 import { setLeaseStatus } from "../actions";
+import { generateInvoice } from "@/app/(workspace)/rent/actions";
 
 // Allowed next states per current status → rendered as buttons.
 const NEXT: Record<string, [string, string][]> = {
@@ -90,6 +91,21 @@ export default async function LeaseDetailPage({
           Activating occupies the unit and assigns the tenant. A unit can have only one active lease (BR-01).
         </p>
       </div>
+
+      {l.status === "active" && (
+        <div className="mt-4 flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] p-5">
+          <div>
+            <div className="text-xs font-semibold uppercase tracking-wide text-white/40">Rent</div>
+            <p className="mt-1 text-sm text-white/50">Generate a rent invoice for this lease.</p>
+          </div>
+          <form action={generateInvoice}>
+            <input type="hidden" name="lease_id" value={l.id} />
+            <button className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-600">
+              Generate rent invoice
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

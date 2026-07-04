@@ -34,7 +34,7 @@ export async function updateSession(request: NextRequest) {
 
   // Gate the authenticated app: everything except the public routes.
   const path = request.nextUrl.pathname;
-  const isPublic = path === "/" || path.startsWith("/login");
+  const isPublic = path === "/" || path.startsWith("/login") || path.startsWith("/pay");
   if (!user && !isPublic) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ngn, fmtDate, LEASE_STATUS_STYLE } from "@/lib/format";
+import { PayLink } from "@/components/pay-link";
 
 const KYC_STYLE: Record<string, string> = {
   verified: "bg-green-500/15 text-green-400",
@@ -96,6 +97,8 @@ export default async function TenantDetailPage({
           </table>
         </div>
       )}
+
+      <PayLink token={t.access_token} />
     </div>
   );
 }

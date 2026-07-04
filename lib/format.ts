@@ -33,6 +33,14 @@ export const CADENCE_LABEL: Record<string, string> = {
   monthly: "Monthly", quarterly: "Quarterly", biannual: "Biannual", annual: "Annual",
 };
 
+export const INVOICE_STATUS_STYLE: Record<string, string> = {
+  paid: "bg-green-500/15 text-green-400",
+  part_paid: "bg-amber-500/15 text-amber-400",
+  open: "bg-white/10 text-white/60",
+  overdue: "bg-red-500/15 text-red-400",
+  void: "bg-white/10 text-white/40",
+};
+
 export function fmtDate(d: string | null | undefined): string {
   if (!d) return "—";
   return new Date(d).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
