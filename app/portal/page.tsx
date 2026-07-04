@@ -4,6 +4,7 @@ import { signout } from "@/app/login/actions";
 import Link from "next/link";
 import { ngn, fmtDate, INVOICE_STATUS_STYLE, MAINT_STATUS_STYLE, LEASE_STATUS_STYLE, effectiveInvoiceStatus } from "@/lib/format";
 import { reportPaymentPortal, reportIssuePortal } from "./actions";
+import { PortalComms } from "@/components/portal-comms";
 
 export default async function PortalPage({
   searchParams,
@@ -160,6 +161,8 @@ export default async function PortalPage({
           </div>
           <button className="mt-1 rounded-lg border border-white/15 px-4 py-2.5 text-sm font-semibold hover:bg-white/5 self-start">Submit issue</button>
         </form>
+
+        <PortalComms back="/portal" />
       </div>
     </main>
   );

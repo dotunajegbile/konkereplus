@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signout } from "@/app/login/actions";
 import { ngn } from "@/lib/format";
+import { PortalComms } from "@/components/portal-comms";
 
 export default async function OwnerPage() {
   const supabase = createClient();
@@ -96,6 +97,8 @@ export default async function OwnerPage() {
             );
           })}
         </div>
+
+        <PortalComms back="/owner" />
       </div>
     </main>
   );
