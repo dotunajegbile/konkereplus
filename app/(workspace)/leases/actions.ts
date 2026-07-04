@@ -56,6 +56,41 @@ export async function createLease(formData: FormData) {
   redirect("/leases");
 }
 
+export async function updateLease(formData: FormData) {
+  const supabase = createClient();
+  await tenantId(supabase);
+  const id = String(formData.get("id") || "");
+  const back = `/leases/${id}`;
+  const cadence = String(formData.get("cadence") || "annual");
+  if (!CADENCE.has(cadence)) redirect(`${back}/edit?error=${encodeURIComponent("Invalid cadence")}`);
+  const date = (k: string) => { const v = String(formData.get(k) || "").trim(); return v === "" ? null : v; };
+  const esc = String(formData.get("escalation_pct") || "").trim();
+
+  const { error } = await supabase.from("leases").update({
+    start_date: date("start_date"),
+    end_date: date("end_date"),
+    rent_amount_minor: toMinor(String(formData.get("rent") || "0")),
+    deposit_minor: toMinor(String(formData.get("deposit") || "0")),
+    cadence,
+    escalation_pct: esc === "" ? null : Number(esc),
+  }).eq("id", id);
+  if (error) redirect(`${back}/edit?error=${encodeURIComponent(error.message)}`);
+
+  revalidatePath("/leases");
+  revalidatePath(back);
+  redirect(back);
+}
+
+export async function deleteLease(formData: FormData) {
+  const supabase = createClient();
+  await tenantId(supabase);
+  const id = String(formData.get("id") || "");
+  const { error } = await supabase.from("leases").delete().eq("id", id);
+  if (error) redirect(`/leases/${id}?error=${encodeURIComponent(error.message)}`);
+  revalidatePath("/leases");
+  redirect("/leases");
+}
+
 // Advance the lease lifecycle, with unit/tenant side effects on activate/terminate.
 export async function setLeaseStatus(formData: FormData) {
   const supabase = createClient();

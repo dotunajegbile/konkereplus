@@ -2,8 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ngn, fmtDate, CADENCE_LABEL, LEASE_STATUS_STYLE } from "@/lib/format";
-import { setLeaseStatus } from "../actions";
+import { setLeaseStatus, deleteLease } from "../actions";
 import { generateInvoice } from "@/app/(workspace)/rent/actions";
+import { ConfirmButton } from "@/components/confirm-button";
 
 // Allowed next states per current status → rendered as buttons.
 const NEXT: Record<string, [string, string][]> = {
@@ -41,9 +42,16 @@ export default async function LeaseDetailPage({
             {party?.full_name} · {unit?.unit_number} @ {unit?.properties?.name}
           </p>
         </div>
-        <span className={"rounded-full px-3 py-1 text-xs font-medium capitalize " + (LEASE_STATUS_STYLE[l.status] ?? "bg-white/10 text-white/60")}>
-          {String(l.status).replace(/_/g, " ")}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className={"rounded-full px-3 py-1 text-xs font-medium capitalize " + (LEASE_STATUS_STYLE[l.status] ?? "bg-white/10 text-white/60")}>
+            {String(l.status).replace(/_/g, " ")}
+          </span>
+          <Link href={`/leases/${l.id}/edit`} className="rounded-lg border border-white/15 px-3 py-1.5 text-sm hover:bg-white/5">Edit</Link>
+          <form action={deleteLease}>
+            <input type="hidden" name="id" value={l.id} />
+            <ConfirmButton message="Delete this lease and its invoices? This cannot be undone." className="rounded-lg border border-white/15 px-3 py-1.5 text-sm text-red-400 hover:bg-red-500/10">Delete</ConfirmButton>
+          </form>
+        </div>
       </div>
 
       {searchParams.error && (

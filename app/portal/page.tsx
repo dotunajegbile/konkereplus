@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signout } from "@/app/login/actions";
-import { ngn, fmtDate, INVOICE_STATUS_STYLE, MAINT_STATUS_STYLE, LEASE_STATUS_STYLE } from "@/lib/format";
+import Link from "next/link";
+import { ngn, fmtDate, INVOICE_STATUS_STYLE, MAINT_STATUS_STYLE, LEASE_STATUS_STYLE, effectiveInvoiceStatus } from "@/lib/format";
 import { reportPaymentPortal, reportIssuePortal } from "./actions";
 
 export default async function PortalPage({
@@ -33,11 +34,12 @@ export default async function PortalPage({
     );
   }
 
-  const [{ data: lease }, { data: invoices }, { data: banks }, { data: requests }] = await Promise.all([
+  const [{ data: lease }, { data: invoices }, { data: banks }, { data: requests }, { data: receipts }] = await Promise.all([
     supabase.from("leases").select("reference, status, start_date, end_date, rent_amount_minor, cadence").eq("tenant_party_id", party.id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
     supabase.from("rent_invoices").select("id, period_label, amount_minor, paid_minor, due_date, status").eq("tenant_party_id", party.id).neq("status", "void").order("created_at", { ascending: false }),
     supabase.from("bank_accounts").select("bank_name, account_name, account_number, instructions"),
     supabase.from("maintenance_requests").select("id, title, status, created_at").eq("tenant_party_id", party.id).order("created_at", { ascending: false }),
+    supabase.from("payments").select("id, amount_minor, paid_on").eq("tenant_party_id", party.id).eq("status", "confirmed").order("created_at", { ascending: false }),
   ]);
 
   const unit = party.units as { unit_number?: string; properties?: { name?: string } } | null;
@@ -76,12 +78,15 @@ export default async function PortalPage({
         <h2 className="mt-6 text-xs font-semibold uppercase tracking-wide text-white/40">Your invoices</h2>
         <div className="mt-2 flex flex-col gap-2">
           {(invoices?.length ?? 0) === 0 && <Empty>No invoices yet.</Empty>}
-          {(invoices ?? []).map((i) => (
-            <div key={i.id} className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] p-4">
-              <div><div className="font-semibold">{i.period_label}</div><div className="text-xs text-white/50">Balance {ngn(i.amount_minor - (i.paid_minor ?? 0))} · due {fmtDate(i.due_date)}</div></div>
-              <span className={"rounded-full px-2.5 py-1 text-xs font-medium capitalize " + (INVOICE_STATUS_STYLE[i.status] ?? "bg-white/10 text-white/60")}>{String(i.status).replace(/_/g, " ")}</span>
-            </div>
-          ))}
+          {(invoices ?? []).map((i) => {
+            const eff = effectiveInvoiceStatus(i.due_date, i.status);
+            return (
+              <div key={i.id} className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                <div><div className="font-semibold">{i.period_label}</div><div className="text-xs text-white/50">Balance {ngn(i.amount_minor - (i.paid_minor ?? 0))} · due {fmtDate(i.due_date)}</div></div>
+                <span className={"rounded-full px-2.5 py-1 text-xs font-medium capitalize " + (INVOICE_STATUS_STYLE[eff] ?? "bg-white/10 text-white/60")}>{eff.replace(/_/g, " ")}</span>
+              </div>
+            );
+          })}
         </div>
 
         {/* Bank details */}
@@ -126,7 +131,21 @@ export default async function PortalPage({
           ))}
         </div>
 
-        <form action={reportIssuePortal} className="mt-3 flex flex-col gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-5">
+        {(receipts?.length ?? 0) > 0 && (
+          <>
+            <h2 className="mt-6 text-xs font-semibold uppercase tracking-wide text-white/40">Receipts</h2>
+            <div className="mt-2 flex flex-col gap-2">
+              {(receipts ?? []).map((r) => (
+                <Link key={r.id} href={`/receipt/${r.id}`} className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] p-3 hover:border-white/20">
+                  <span className="text-sm">{ngn(r.amount_minor)} · {fmtDate(r.paid_on)}</span>
+                  <span className="text-sm font-semibold text-brand">Receipt →</span>
+                </Link>
+              ))}
+            </div>
+          </>
+        )}
+
+        <form action={reportIssuePortal} className="mt-6 flex flex-col gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-5">
           <h2 className="font-semibold">Report an issue</h2>
           <Input name="title" label="What's wrong?" placeholder="e.g. AC not cooling" />
           <div className="grid grid-cols-2 gap-3">

@@ -61,3 +61,13 @@ export const PRIORITY_STYLE: Record<string, string> = {
   medium: "bg-white/10 text-white/60",
   low: "bg-white/10 text-white/50",
 };
+
+// An invoice past its due date and not fully paid is effectively overdue,
+// regardless of the stored status (computed on read — no cron needed).
+export function isOverdue(dueDate: string | null | undefined, status: string): boolean {
+  if (!dueDate || status === "paid" || status === "void") return false;
+  return new Date(dueDate) < new Date(new Date().toDateString());
+}
+export function effectiveInvoiceStatus(dueDate: string | null | undefined, status: string): string {
+  return isOverdue(dueDate, status) ? "overdue" : status;
+}
