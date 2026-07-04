@@ -33,10 +33,10 @@ export default function Home() {
       {/* Nav */}
       <header className="sticky top-0 z-50 border-b border-white/10 bg-ink/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5">
-          <div className="flex items-center gap-2 font-extrabold">
+          <Link href="/" aria-label="KonkerePlus home" className="flex items-center gap-2 font-extrabold rounded-lg transition hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">
             <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand text-sm font-black text-white">K+</span>
             KonkerePlus
-          </div>
+          </Link>
           <nav className="hidden gap-7 text-sm font-medium text-white/70 md:flex">
             <a href="#modules" className="hover:text-white">Platform</a>
             <a href="#listings" className="hover:text-white">Listings</a>
@@ -126,10 +126,10 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-white/10">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-5 py-8 text-sm text-white/50">
-          <div className="flex items-center gap-2 font-bold text-white/80">
+          <Link href="/" aria-label="KonkerePlus home" className="flex items-center gap-2 font-bold text-white/80 transition hover:text-white">
             <span className="grid h-7 w-7 place-items-center rounded-lg bg-brand text-xs font-black text-white">K+</span>
             KonkerePlus
-          </div>
+          </Link>
           <span className="rounded-full border border-white/10 px-2.5 py-1 text-xs">🔒 AES-256 · TLS 1.2+</span>
           <span className="rounded-full border border-white/10 px-2.5 py-1 text-xs">NG · NDPR aligned</span>
           <span className="ml-auto">© 2026 KonkerePlus</span>

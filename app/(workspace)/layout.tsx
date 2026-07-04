@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signout } from "@/app/login/actions";
@@ -36,7 +37,7 @@ export default async function WorkspaceLayout({
   return (
     <div className="grid min-h-screen grid-cols-1 md:grid-cols-[240px_1fr]">
       <aside className="hidden flex-col border-r border-white/10 bg-white/[0.02] md:flex">
-        <div className="flex items-center gap-2 px-4 py-4">
+        <Link href="/dashboard" aria-label="Dashboard" className="flex items-center gap-2 px-4 py-4 transition hover:opacity-80">
           <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand text-sm font-black text-white">
             K+
           </span>
@@ -44,7 +45,7 @@ export default async function WorkspaceLayout({
             <div className="text-sm font-bold">KonkerePlus</div>
             <div className="text-[11px] text-white/40">{tenantName}</div>
           </div>
-        </div>
+        </Link>
         <div className="flex-1 py-2">
           <Nav />
         </div>
