@@ -52,3 +52,35 @@ export async function createProperty(formData: FormData) {
   revalidatePath("/properties");
   redirect("/properties");
 }
+
+export async function updateProperty(formData: FormData) {
+  const supabase = createClient();
+  const id = String(formData.get("id") || "");
+  const name = String(formData.get("name") || "").trim();
+  const type = String(formData.get("type") || "residential");
+  const status = String(formData.get("status") || "active");
+  const city = String(formData.get("city") || "").trim() || null;
+  const address = String(formData.get("address") || "").trim() || null;
+  const back = `/properties/${id}`;
+  if (!name) redirect(`${back}/edit?error=${encodeURIComponent("Name is required")}`);
+  if (!TYPES.has(type)) redirect(`${back}/edit?error=${encodeURIComponent("Invalid type")}`);
+
+  const { error } = await supabase
+    .from("properties")
+    .update({ name, type, status, city, address })
+    .eq("id", id);
+  if (error) redirect(`${back}/edit?error=${encodeURIComponent(error.message)}`);
+
+  revalidatePath("/properties");
+  revalidatePath(back);
+  redirect(back);
+}
+
+export async function deleteProperty(formData: FormData) {
+  const supabase = createClient();
+  const id = String(formData.get("id") || "");
+  const { error } = await supabase.from("properties").delete().eq("id", id);
+  if (error) redirect(`/properties/${id}?error=${encodeURIComponent(error.message)}`);
+  revalidatePath("/properties");
+  redirect("/properties");
+}

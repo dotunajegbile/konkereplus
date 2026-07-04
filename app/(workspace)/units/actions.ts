@@ -62,3 +62,38 @@ export async function createUnit(formData: FormData) {
   revalidatePath(`/properties/${propertyId}`);
   redirect("/units");
 }
+
+export async function updateUnit(formData: FormData) {
+  const supabase = createClient();
+  const id = String(formData.get("id") || "");
+  const unit_number = String(formData.get("unit_number") || "").trim();
+  const status = String(formData.get("status") || "available");
+  const back = `/units/${id}/edit`;
+  if (!unit_number) redirect(`${back}?error=${encodeURIComponent("Unit number is required")}`);
+
+  const num = (v: FormDataEntryValue | null) => {
+    const n = Number(String(v ?? "").trim());
+    return Number.isFinite(n) && String(v ?? "").trim() !== "" ? n : null;
+  };
+  const { error } = await supabase.from("units").update({
+    unit_number, status,
+    floor: num(formData.get("floor")),
+    bedrooms: num(formData.get("bedrooms")) ?? 0,
+    bathrooms: num(formData.get("bathrooms")) ?? 0,
+    sq_ft: num(formData.get("sq_ft")),
+    rent_amount_minor: toMinor(String(formData.get("rent") || "0")),
+  }).eq("id", id);
+  if (error) redirect(`${back}?error=${encodeURIComponent(error.message)}`);
+
+  revalidatePath("/units");
+  redirect("/units");
+}
+
+export async function deleteUnit(formData: FormData) {
+  const supabase = createClient();
+  const id = String(formData.get("id") || "");
+  const { error } = await supabase.from("units").delete().eq("id", id);
+  if (error) redirect(`/units/${id}/edit?error=${encodeURIComponent(error.message)}`);
+  revalidatePath("/units");
+  redirect("/units");
+}

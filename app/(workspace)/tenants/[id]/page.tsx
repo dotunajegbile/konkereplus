@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ngn, fmtDate, LEASE_STATUS_STYLE } from "@/lib/format";
 import { PayLink } from "@/components/pay-link";
+import { deleteTenantParty } from "../actions";
+import { ConfirmButton } from "@/components/confirm-button";
 
 const KYC_STYLE: Record<string, string> = {
   verified: "bg-green-500/15 text-green-400",
@@ -35,11 +37,18 @@ export default async function TenantDetailPage({
     <div className="mx-auto max-w-3xl">
       <Link href="/tenants" className="text-sm text-white/50 hover:text-white">← Tenants</Link>
 
-      <div className="mt-3 flex items-start justify-between">
+      <div className="mt-3 flex items-start justify-between gap-3">
         <h1 className="text-2xl font-extrabold tracking-tight">{t.full_name}</h1>
-        <span className={"rounded-full px-3 py-1 text-xs font-medium capitalize " + (KYC_STYLE[t.kyc_status] ?? "bg-white/10 text-white/60")}>
-          KYC: {t.kyc_status}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className={"rounded-full px-3 py-1 text-xs font-medium capitalize " + (KYC_STYLE[t.kyc_status] ?? "bg-white/10 text-white/60")}>
+            KYC: {t.kyc_status}
+          </span>
+          <Link href={`/tenants/${t.id}/edit`} className="rounded-lg border border-white/15 px-3 py-1.5 text-sm hover:bg-white/5">Edit</Link>
+          <form action={deleteTenantParty}>
+            <input type="hidden" name="id" value={t.id} />
+            <ConfirmButton message="Delete this tenant profile? Their leases and invoices go too. This cannot be undone." className="rounded-lg border border-white/15 px-3 py-1.5 text-sm text-red-400 hover:bg-red-500/10">Delete</ConfirmButton>
+          </form>
+        </div>
       </div>
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2">

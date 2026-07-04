@@ -51,7 +51,9 @@ export default async function UnitsPage() {
             <tbody>
               {units!.map((u) => (
                 <tr key={u.id} className="border-b border-white/5 last:border-0 hover:bg-white/[0.03]">
-                  <td className="px-4 py-3 font-mono text-xs font-semibold">{u.unit_number}</td>
+                  <td className="px-4 py-3 font-mono text-xs font-semibold">
+                    <Link href={`/units/${u.id}/edit`} className="hover:text-brand">{u.unit_number}</Link>
+                  </td>
                   <td className="px-4 py-3">
                     <Link href={`/properties/${u.property_id}`} className="text-white/70 hover:text-brand">
                       {(u.properties as { name?: string } | null)?.name ?? "—"}

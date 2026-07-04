@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ngn, UNIT_STATUS_STYLE } from "@/lib/format";
+import { deleteProperty } from "../actions";
+import { ConfirmButton } from "@/components/confirm-button";
 
 const TYPE_LABEL: Record<string, string> = {
   residential: "Residential", commercial: "Commercial", mixed_use: "Mixed-use",
@@ -49,9 +51,16 @@ export default async function PropertyDetailPage({
           <h1 className="text-2xl font-extrabold tracking-tight">{p.name}</h1>
           <p className="mt-1 font-mono text-xs text-white/50">{p.code}</p>
         </div>
-        <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-medium capitalize text-white/70">
-          {String(p.status).replace(/_/g, " ")}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-medium capitalize text-white/70">
+            {String(p.status).replace(/_/g, " ")}
+          </span>
+          <Link href={`/properties/${p.id}/edit`} className="rounded-lg border border-white/15 px-3 py-1.5 text-sm hover:bg-white/5">Edit</Link>
+          <form action={deleteProperty}>
+            <input type="hidden" name="id" value={p.id} />
+            <ConfirmButton message="Delete this property and everything under it (units, leases, invoices)? This cannot be undone." className="rounded-lg border border-white/15 px-3 py-1.5 text-sm text-red-400 hover:bg-red-500/10">Delete</ConfirmButton>
+          </form>
+        </div>
       </div>
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2">
