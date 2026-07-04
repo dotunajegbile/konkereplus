@@ -62,6 +62,22 @@ export const PRIORITY_STYLE: Record<string, string> = {
   low: "bg-white/10 text-white/50",
 };
 
+export const PROJECT_STATUS_STYLE: Record<string, string> = {
+  on_track: "bg-green-500/15 text-green-400",
+  completed: "bg-green-500/15 text-green-400",
+  planning: "bg-white/10 text-white/60",
+  at_risk: "bg-red-500/15 text-red-400",
+  on_hold: "bg-amber-500/15 text-amber-400",
+};
+
+export const RFI_STATUS_STYLE: Record<string, string> = {
+  approved: "bg-green-500/15 text-green-400",
+  submitted: "bg-blue-500/15 text-blue-400",
+  review: "bg-amber-500/15 text-amber-400",
+  draft: "bg-white/10 text-white/60",
+  rejected: "bg-red-500/15 text-red-400",
+};
+
 // An invoice past its due date and not fully paid is effectively overdue,
 // regardless of the stored status (computed on read — no cron needed).
 export function isOverdue(dueDate: string | null | undefined, status: string): boolean {

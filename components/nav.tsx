@@ -11,6 +11,7 @@ const ITEMS: [string, string, string][] = [
   ["/leases", "Leases", "✎"],
   ["/rent", "Rent", "₦"],
   ["/maintenance", "Maintenance", "⚒"],
+  ["/construction", "Construction", "⌂"],
   ["/owners", "Owners", "◈"],
 ];
 
