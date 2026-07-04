@@ -70,6 +70,20 @@ export const PROJECT_STATUS_STYLE: Record<string, string> = {
   on_hold: "bg-amber-500/15 text-amber-400",
 };
 
+export const LEAD_STAGES: [string, string][] = [
+  ["new", "New"], ["contacted", "Contacted"], ["qualified", "Qualified"],
+  ["viewing", "Viewing"], ["offer", "Offer"], ["won", "Won"], ["lost", "Lost"],
+];
+export const LEAD_STATUS_STYLE: Record<string, string> = {
+  won: "bg-green-500/15 text-green-400",
+  lost: "bg-red-500/15 text-red-400",
+  offer: "bg-brand/15 text-brand",
+  viewing: "bg-blue-500/15 text-blue-400",
+  qualified: "bg-blue-500/15 text-blue-400",
+  contacted: "bg-amber-500/15 text-amber-400",
+  new: "bg-white/10 text-white/60",
+};
+
 export const RFI_STATUS_STYLE: Record<string, string> = {
   approved: "bg-green-500/15 text-green-400",
   submitted: "bg-blue-500/15 text-blue-400",

@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: [
         "/dashboard", "/onboarding", "/properties", "/units", "/tenants",
-        "/leases", "/rent", "/maintenance", "/construction", "/portal", "/receipt",
+        "/leases", "/rent", "/maintenance", "/construction", "/crm", "/portal", "/receipt",
         "/owners", "/owner", "/claim-owner",
         "/login", "/claim", "/pay",
       ],
