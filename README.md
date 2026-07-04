@@ -1,6 +1,6 @@
 # KonkerePlus
 
-**Live:** https://konkereplus.com — password-protected preview (auto-deploys on push to `main`).
+**Live:** https://konkereplus.com — the real Next.js + Supabase app (auto-deploys on push to `main`).
 
 Multi-tenant real-estate SaaS — **build, sell, lease, and manage** every property, behind one permission-first login. Spans construction → sales/leasing → property & facilities management → tenant relations → legal → finance.
 
