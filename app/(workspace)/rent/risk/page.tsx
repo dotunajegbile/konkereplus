@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { ngn } from "@/lib/format";
 import { loadArrearsRisk, RISK_TIER_STYLE } from "@/lib/arrears-risk";
+import { ReminderComposer } from "@/components/reminder-composer";
 
 // Arrears-risk board: every tenant ranked by a transparent, rules-based score.
 export default async function ArrearsRiskPage() {
@@ -55,6 +56,11 @@ export default async function ArrearsRiskPage() {
             <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
               <div className={"h-full rounded-full " + (r.tier === "high" ? "bg-red-500" : r.tier === "medium" ? "bg-amber-500" : "bg-green-500")} style={{ width: `${r.score}%` }} />
             </div>
+            {r.balance > 0 && (
+              <div className="mt-2.5">
+                <ReminderComposer partyId={r.id} name={r.name} />
+              </div>
+            )}
           </div>
         ))}
       </div>
