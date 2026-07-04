@@ -17,6 +17,7 @@ const ITEMS: [string, string, string][] = [
   ["/finance", "Finance", "$"],
   ["/documents", "Documents", "▣"],
   ["/communications", "Communications", "✉"],
+  ["/reports", "Reports", "▤"],
   ["/owners", "Owners", "◈"],
 ];
 
