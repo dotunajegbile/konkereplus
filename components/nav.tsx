@@ -11,6 +11,7 @@ const ITEMS: [string, string, string][] = [
   ["/leases", "Leases", "✎"],
   ["/rent", "Rent", "₦"],
   ["/maintenance", "Maintenance", "⚒"],
+  ["/owners", "Owners", "◈"],
 ];
 
 // Modules coming next — shown disabled so the roadmap is visible in-product.

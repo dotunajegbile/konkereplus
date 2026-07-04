@@ -39,6 +39,7 @@ export async function updateSession(request: NextRequest) {
     path.startsWith("/login") ||
     path.startsWith("/pay") ||
     path.startsWith("/claim") ||
+    path.startsWith("/claim-owner") ||
     path === "/robots.txt" ||
     path === "/sitemap.xml" ||
     path.startsWith("/opengraph-image") ||

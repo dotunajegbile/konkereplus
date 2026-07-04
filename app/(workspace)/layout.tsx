@@ -20,11 +20,14 @@ export default async function WorkspaceLayout({
     .eq("user_id", user.id)
     .maybeSingle();
 
-  // Not staff? Route linked tenants to their portal; otherwise onboard a new company.
+  // Not staff? Route linked tenants / owners to their portal; otherwise onboard a new company.
   if (!membership) {
     const { data: party } = await supabase
       .from("tenant_parties").select("id").eq("user_id", user.id).maybeSingle();
-    redirect(party ? "/portal" : "/onboarding");
+    if (party) redirect("/portal");
+    const { data: owner } = await supabase
+      .from("owners").select("id").eq("user_id", user.id).maybeSingle();
+    redirect(owner ? "/owner" : "/onboarding");
   }
 
   const tenantName = (membership.tenants as { name?: string } | null)?.name ?? "—";
