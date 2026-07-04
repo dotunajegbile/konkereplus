@@ -84,6 +84,25 @@ export const LEAD_STATUS_STYLE: Record<string, string> = {
   new: "bg-white/10 text-white/60",
 };
 
+export const CASE_TYPES: [string, string][] = [
+  ["dispute", "Dispute"], ["eviction", "Eviction"], ["lawsuit", "Lawsuit"], ["other", "Other"],
+];
+export const CASE_STAGES: [string, string][] = [
+  ["open", "Open"], ["active", "Active"], ["hearing_scheduled", "Hearing scheduled"],
+  ["in_hearing", "In hearing"], ["judgement", "Judgement"], ["settlement", "Settlement"],
+  ["closed", "Closed"], ["on_hold", "On hold"],
+];
+export const CASE_STATUS_STYLE: Record<string, string> = {
+  closed: "bg-white/10 text-white/50",
+  settlement: "bg-green-500/15 text-green-400",
+  judgement: "bg-brand/15 text-brand",
+  hearing_scheduled: "bg-amber-500/15 text-amber-400",
+  in_hearing: "bg-amber-500/15 text-amber-400",
+  active: "bg-blue-500/15 text-blue-400",
+  open: "bg-white/10 text-white/60",
+  on_hold: "bg-white/10 text-white/50",
+};
+
 export const RFI_STATUS_STYLE: Record<string, string> = {
   approved: "bg-green-500/15 text-green-400",
   submitted: "bg-blue-500/15 text-blue-400",
