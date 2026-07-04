@@ -130,7 +130,6 @@ export default function Home() {
             <span className="grid h-7 w-7 place-items-center rounded-lg bg-brand text-xs font-black text-white">K+</span>
             KonkerePlus
           </Link>
-          <span className="rounded-full border border-white/10 px-2.5 py-1 text-xs">🔒 AES-256 · TLS 1.2+</span>
           <span className="rounded-full border border-white/10 px-2.5 py-1 text-xs">NG · NDPR aligned</span>
           <span className="ml-auto">© 2026 KonkerePlus</span>
           <Link href="/login" className="hover:text-white">Log in</Link>
