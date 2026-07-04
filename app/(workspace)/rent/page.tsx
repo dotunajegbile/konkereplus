@@ -34,6 +34,9 @@ export default async function RentPage({
           <form action={reconcileOverdue}>
             <button className="rounded-lg border border-white/15 px-4 py-2 text-sm font-semibold hover:bg-white/5">Flag overdue</button>
           </form>
+          <Link href="/rent/risk" className="rounded-lg border border-white/15 px-4 py-2 text-sm font-semibold hover:bg-white/5">
+            Arrears risk
+          </Link>
           <Link href="/rent/bank-accounts" className="rounded-lg border border-white/15 px-4 py-2 text-sm font-semibold hover:bg-white/5">
             Bank accounts
           </Link>

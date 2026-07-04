@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { ngn, fmtDate, CASE_STATUS_STYLE, PROJECT_STATUS_STYLE } from "@/lib/format";
+import { loadArrearsRisk, RISK_TIER_STYLE } from "@/lib/arrears-risk";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 // Per-role dashboard: each staff role lands on a view tuned to their job.
@@ -89,6 +90,7 @@ async function financeDash(supabase: SupabaseClient) {
         ))}
         {(reported ?? 0) === 0 && overdue.length === 0 && <Clear />}
       </Panel>
+      {await atRiskPanel(supabase)}
       <Links items={[["/rent", "Rent & payments"], ["/finance", "Finance"], ["/reports", "Reports"]]} />
     </>
   );
@@ -240,12 +242,39 @@ async function opsDash(supabase: SupabaseClient) {
         ))}
         {rep === 0 && emergencies.length === 0 && unpaid.length === 0 && <Clear />}
       </Panel>
+      {await atRiskPanel(supabase)}
       {openMaint.length > 0 && (
         <p className="mt-3 text-sm text-white/50">
           {openMaint.length} open maintenance request{openMaint.length === 1 ? "" : "s"} —{" "}
           <Link href="/maintenance" className="text-brand hover:underline">view board</Link>.
         </p>
       )}
+    </>
+  );
+}
+
+/* ---------- shared: arrears-risk panel ---------- */
+async function atRiskPanel(supabase: SupabaseClient) {
+  const ranked = (await loadArrearsRisk(supabase)).filter((r) => r.tier !== "low");
+  if (ranked.length === 0) return null;
+  return (
+    <>
+      <div className="mt-8 mb-2 flex items-center justify-between">
+        <h2 className="font-semibold">At-risk tenants <span className="text-white/40">({ranked.length})</span></h2>
+        <Link href="/rent/risk" className="text-sm text-brand hover:underline">Risk board →</Link>
+      </div>
+      <div className="rounded-xl border border-white/10 bg-white/[0.03]">
+        {ranked.slice(0, 5).map((r) => (
+          <Link key={r.id} href="/rent/risk" className="flex items-center gap-3 border-b border-white/5 px-4 py-3 last:border-0 hover:bg-white/[0.03]">
+            <span className={"rounded-full px-2 py-0.5 text-xs font-semibold capitalize " + RISK_TIER_STYLE[r.tier]}>{r.tier} · {r.score}</span>
+            <div className="min-w-0 flex-1">
+              <div className="truncate text-sm font-semibold">{r.name}</div>
+              <div className="truncate text-xs text-white/50">{r.factors[0]}</div>
+            </div>
+            {r.balance > 0 && <span className="font-mono text-xs tabular-nums text-white/60">{ngn(r.balance)}</span>}
+          </Link>
+        ))}
+      </div>
     </>
   );
 }
