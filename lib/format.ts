@@ -45,3 +45,19 @@ export function fmtDate(d: string | null | undefined): string {
   if (!d) return "—";
   return new Date(d).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 }
+
+export const MAINT_STATUS_STYLE: Record<string, string> = {
+  open: "bg-white/10 text-white/60",
+  assigned: "bg-blue-500/15 text-blue-400",
+  in_progress: "bg-amber-500/15 text-amber-400",
+  on_hold: "bg-amber-500/15 text-amber-400",
+  completed: "bg-green-500/15 text-green-400",
+  cancelled: "bg-white/10 text-white/40",
+};
+
+export const PRIORITY_STYLE: Record<string, string> = {
+  emergency: "bg-red-500/15 text-red-400",
+  high: "bg-amber-500/15 text-amber-400",
+  medium: "bg-white/10 text-white/60",
+  low: "bg-white/10 text-white/50",
+};
