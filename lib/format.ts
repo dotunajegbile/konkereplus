@@ -84,6 +84,12 @@ export const LEAD_STATUS_STYLE: Record<string, string> = {
   new: "bg-white/10 text-white/60",
 };
 
+export const EXPENSE_STATUS_STYLE: Record<string, string> = {
+  paid: "bg-green-500/15 text-green-400",
+  approved: "bg-blue-500/15 text-blue-400",
+  pending: "bg-amber-500/15 text-amber-400",
+};
+
 export const CASE_TYPES: [string, string][] = [
   ["dispute", "Dispute"], ["eviction", "Eviction"], ["lawsuit", "Lawsuit"], ["other", "Other"],
 ];
