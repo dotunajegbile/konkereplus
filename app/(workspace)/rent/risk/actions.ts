@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ngn, fmtDate } from "@/lib/format";
+import { callClaude } from "@/lib/ai";
 
 type DraftResult = { ok: true; draft: string; subject: string } | { ok: false; error: string };
 
@@ -12,9 +13,6 @@ export async function draftReminder(partyId: string): Promise<DraftResult> {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
-
-  const key = process.env.ANTHROPIC_API_KEY;
-  if (!key) return { ok: false, error: "AI is not configured yet — add ANTHROPIC_API_KEY in Netlify to enable drafting." };
 
   // Tenant context (RLS: staff only see parties in their own tenant).
   const { data: party } = await supabase
@@ -57,29 +55,7 @@ Write the message body only — no subject line, no placeholders like [Name], no
 - Remind them they can pay by bank transfer and report the payment from their tenant portal pay-link.
 - Keep it to 4-6 short sentences. Sign off as "Your property manager".`;
 
-  try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "x-api-key": key,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "claude-haiku-4-5-20251001",
-        max_tokens: 500,
-        messages: [{ role: "user", content: prompt }],
-      }),
-    });
-    if (!res.ok) {
-      const t = await res.text();
-      return { ok: false, error: `Claude API error (${res.status}). ${t.slice(0, 140)}` };
-    }
-    const data = await res.json();
-    const draft = (data?.content?.[0]?.text ?? "").trim();
-    if (!draft) return { ok: false, error: "Claude returned an empty draft — try again." };
-    return { ok: true, draft, subject: `Rent reminder — ${ngn(balance)} outstanding` };
-  } catch (e) {
-    return { ok: false, error: `Could not reach Claude: ${(e as Error).message}` };
-  }
+  const res = await callClaude(prompt, 500);
+  if (!res.ok) return res;
+  return { ok: true, draft: res.text, subject: `Rent reminder — ${ngn(balance)} outstanding` };
 }

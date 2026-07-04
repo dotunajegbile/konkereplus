@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { fmtDate } from "@/lib/format";
-import { createThread, postAnnouncement, deleteAnnouncement } from "./actions";
+import { createThread, deleteAnnouncement } from "./actions";
 import { ConfirmButton } from "@/components/confirm-button";
+import { AnnouncementDrafter } from "@/components/announcement-drafter";
 
 export default async function CommunicationsPage({ searchParams }: { searchParams: { error?: string } }) {
   const supabase = createClient();
@@ -73,17 +74,7 @@ export default async function CommunicationsPage({ searchParams }: { searchParam
             {(announcements?.length ?? 0) === 0 && <div className="rounded-xl border border-dashed border-white/15 py-6 text-center text-sm text-white/50">No announcements.</div>}
           </div>
 
-          <form action={postAnnouncement} className="mt-3 flex flex-col gap-2 rounded-xl border border-white/10 bg-white/[0.03] p-4">
-            <div className="text-xs font-semibold text-white/70">Post an announcement</div>
-            <input name="title" placeholder="Title" required className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm outline-none focus:border-brand" />
-            <textarea name="body" rows={2} placeholder="Message…" className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm outline-none focus:border-brand" />
-            <select name="audience" defaultValue="all" className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm outline-none focus:border-brand">
-              <option value="all" className="bg-ink">Everyone</option>
-              <option value="tenants" className="bg-ink">Tenants</option>
-              <option value="owners" className="bg-ink">Owners</option>
-            </select>
-            <button className="self-start rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-600">Post</button>
-          </form>
+          <AnnouncementDrafter />
         </section>
       </div>
     </div>

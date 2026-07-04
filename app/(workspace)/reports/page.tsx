@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { ngn } from "@/lib/format";
 import { ReportsExport } from "@/components/reports-export";
+import { ReportsAsk } from "@/components/reports-ask";
 
 // Read-only analytics over existing RLS-scoped data. No new tables.
 // Income = confirmed payments; expenses = paid expenses (matches the Finance module).
@@ -111,6 +112,8 @@ export default async function ReportsPage() {
         </div>
         <ReportsExport filename="konkereplus-report.csv" rows={exportRows} />
       </div>
+
+      <ReportsAsk />
 
       {/* Headline KPIs */}
       <div className="mt-6 grid gap-3 sm:grid-cols-4">

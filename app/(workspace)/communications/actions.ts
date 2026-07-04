@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { callClaude } from "@/lib/ai";
 
 async function staffTenant(supabase: ReturnType<typeof createClient>) {
   const { data: { user } } = await supabase.auth.getUser();
@@ -11,6 +12,27 @@ async function staffTenant(supabase: ReturnType<typeof createClient>) {
     .from("memberships").select("tenant_id").eq("user_id", user.id).maybeSingle();
   if (!m) redirect("/onboarding");
   return { tid: m.tenant_id as string, uid: user.id };
+}
+
+// Drafts an announcement (title + body) with Claude from a short topic.
+export async function draftAnnouncement(
+  topic: string,
+  audience: string,
+): Promise<{ ok: true; title: string; body: string } | { ok: false; error: string }> {
+  const supabase = createClient();
+  await staffTenant(supabase);
+  const who = audience === "tenants" ? "tenants" : audience === "owners" ? "property owners" : "tenants and owners";
+  const prompt = `You are a property manager in Nigeria posting a building announcement to ${who}.
+Topic: ${topic || "(general update)"}
+
+Write it in this exact format and nothing else:
+TITLE: <a short, clear title, max 8 words>
+<one or two short paragraphs, plain text, no markdown, polite and professional>`;
+  const res = await callClaude(prompt, 400);
+  if (!res.ok) return res;
+  const m = res.text.match(/^\s*TITLE:\s*(.+?)\n([\s\S]*)$/i);
+  if (!m) return { ok: true, title: (topic || "Announcement").slice(0, 60), body: res.text.trim() };
+  return { ok: true, title: m[1].trim(), body: m[2].trim() };
 }
 
 export async function createThread(formData: FormData) {

@@ -4,6 +4,7 @@ import { fmtDate } from "@/lib/format";
 import { DocumentUploader } from "@/components/document-uploader";
 import { deleteDocument } from "./actions";
 import { ConfirmButton } from "@/components/confirm-button";
+import { DocumentSummary } from "@/components/document-summary";
 
 function fileSize(b: number | null | undefined) {
   if (!b) return "—";
@@ -72,6 +73,7 @@ export default async function DocumentsPage({ searchParams }: { searchParams: { 
                   <td className="px-4 py-3 text-white/60">{d.expires_at ? fmtDate(d.expires_at) : "—"}</td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
+                      <DocumentSummary docId={d.id} name={d.name} />
                       {signed.get(d.id) && <a href={signed.get(d.id)} target="_blank" className="rounded-lg border border-white/15 px-2.5 py-1 text-xs hover:bg-white/5">Download</a>}
                       <form action={deleteDocument}>
                         <input type="hidden" name="id" value={d.id} />
