@@ -13,6 +13,8 @@ export async function askReports(
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
+  const { data: staff } = await supabase.from("memberships").select("tenant_id").eq("user_id", user.id).maybeSingle();
+  if (!staff) return { ok: false, error: "Staff access only." };
   const q = question.trim();
   if (!q) return { ok: false, error: "Type a question first." };
 

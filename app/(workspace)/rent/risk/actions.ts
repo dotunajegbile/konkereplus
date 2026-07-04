@@ -13,6 +13,8 @@ export async function draftReminder(partyId: string): Promise<DraftResult> {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
+  const { data: staff } = await supabase.from("memberships").select("tenant_id").eq("user_id", user.id).maybeSingle();
+  if (!staff) return { ok: false, error: "Staff access only." };
 
   // Tenant context (RLS: staff only see parties in their own tenant).
   const { data: party } = await supabase
